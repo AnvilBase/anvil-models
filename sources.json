@@ -4,13 +4,24 @@
     "anvil-forge": {
       "name": "Anvil Forge",
       "version": "1",
-      "summary": "Runs entirely on your phone. Text, photos, and web search.",
+      "summary": "The larger model. Needs an iPhone with memory to spare.",
       "fileName": "anvil-forge.litertlm",
       "source": "https://huggingface.co/litert-community/gemma-4-E4B-it-litert-lm/resolve/main/gemma-4-E4B-it.litertlm",
       "license": "Apache-2.0",
       "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
-      "recommended": true,
+      "recommended": false,
       "minimumFreeBytes": 4500000000
+    },
+    "anvil-spark": {
+      "name": "Anvil Spark",
+      "version": "1",
+      "summary": "Smaller and quicker. The one to pick if Forge won't load.",
+      "fileName": "anvil-spark.litertlm",
+      "source": "https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm/resolve/main/gemma-4-E2B-it.litertlm",
+      "license": "Apache-2.0",
+      "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
+      "recommended": true,
+      "minimumFreeBytes": 3200000000
     }
   }
 }

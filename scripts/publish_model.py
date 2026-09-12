@@ -21,6 +21,7 @@ Options:
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import hashlib
 import json
 import os
@@ -37,6 +38,7 @@ SOURCES = ROOT / "sources.json"
 CATALOG = ROOT / "models.json"
 WORK = ROOT / "work"
 DEFAULT_REPO = "AnvilBase/anvil-models"
+UPLOAD_CONCURRENCY = 3
 READ_SIZE = 8 * 1024 * 1024
 
 
@@ -213,9 +215,25 @@ def publish_release(repo: str, tag: str, spec: dict, parts: list[dict], parts_di
     else:
         print(f"  release {tag} already exists; uploading into it")
 
-    # One at a time, so an interrupted upload can be picked up where it stopped.
-    for part in parts:
-        run(["gh", "release", "upload", tag, str(parts_dir / part["name"]), "--repo", repo, "--clobber"])
+    # Several at once: one upload rarely saturates a connection, and each part is still its own
+    # command, so an interrupted run picks up from whichever parts already landed.
+    def upload(part):
+        subprocess.run(
+            ["gh", "release", "upload", tag, str(parts_dir / part["name"]), "--repo", repo, "--clobber"],
+            check=True, capture_output=True, text=True)
+        return part["name"]
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=UPLOAD_CONCURRENCY) as pool:
+        futures = {pool.submit(upload, part): part for part in parts}
+        done = 0
+        for future in concurrent.futures.as_completed(futures):
+            name = futures[future]["name"]
+            try:
+                future.result()
+            except subprocess.CalledProcessError as err:
+                sys.exit(f"Uploading {name} failed:\n{err.stderr}")
+            done += 1
+            print(f"  uploaded {name}  ({done}/{len(parts)})")
 
 
 # --- catalog ----------------------------------------------------------------
