@@ -1,0 +1,4 @@
+# Downloaded source models and the split parts. These are gigabytes; they live
+# in the GitHub release, never in git.
+work/
+.DS_Store

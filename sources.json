@@ -1,0 +1,29 @@
+{
+  "partSizeBytes": 536870912,
+  "models": {
+    "anvil-lite": {
+      "name": "Anvil Lite",
+      "version": "1",
+      "summary": "Runs entirely on your phone. Text, photos, and web search.",
+      "fileName": "anvil-lite.litertlm",
+      "source": "https://huggingface.co/litert-community/gemma-4-E4B-it-litert-lm/resolve/main/gemma-4-E4B-it.litertlm",
+      "basedOn": "Gemma 4 E4B (litert-lm)",
+      "license": "Apache-2.0",
+      "licenseURL": "https://ai.google.dev/gemma/terms",
+      "recommended": true,
+      "minimumFreeBytes": 4500000000
+    },
+    "anvil-nano": {
+      "name": "Anvil Nano",
+      "version": "1",
+      "summary": "Smaller and faster. For phones with less memory to spare.",
+      "fileName": "anvil-nano.litertlm",
+      "source": "https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm/resolve/main/gemma-4-E2B-it.litertlm",
+      "basedOn": "Gemma 4 E2B (litert-lm)",
+      "license": "Apache-2.0",
+      "licenseURL": "https://ai.google.dev/gemma/terms",
+      "recommended": false,
+      "minimumFreeBytes": 3200000000
+    }
+  }
+}
