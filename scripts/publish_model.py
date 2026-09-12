@@ -5,7 +5,7 @@ A .litertlm file is several gigabytes, and GitHub caps a release asset at 2 GiB,
 so the file is split into parts. The Anvil app downloads the parts, checks each
 one against the SHA-256 in models.json, and appends them back into one file.
 
-    scripts/publish_model.py anvil-lite
+    scripts/publish_model.py anvil-forge
 
 Steps: download the source (resumable), split it into parts, hash everything,
 create or reuse the release, upload the parts, and rewrite models.json. Run it
@@ -194,9 +194,15 @@ def publish_release(repo: str, tag: str, spec: dict, parts: list[dict], parts_di
         sys.exit("The GitHub CLI (gh) is not installed. brew install gh, then gh auth login.")
 
     if not release_exists(repo, tag):
+        origin = (
+            f"Based on {spec['basedOn']}, licensed under {spec['license']}."
+            if spec.get("basedOn")
+            else f"An open model redistributed under {spec['license']}"
+            f" ({spec.get('licenseURL', '')}).".rstrip()
+        )
         notes = (
             f"{spec['name']} for the Anvil app.\n\n"
-            f"Based on {spec['basedOn']}, licensed under {spec['license']}.\n\n"
+            f"{origin}\n\n"
             f"The model is split into {len(parts)} parts because a GitHub release asset "
             "is capped at 2 GiB. The app downloads the parts listed in `models.json`, "
             "checks each one against its SHA-256, and appends them into a single "
@@ -227,7 +233,7 @@ def write_catalog(model_id: str, spec: dict, tag: str, parts: list[dict], sha: s
         "sha256": sha,
         "minimumFreeBytes": spec.get("minimumFreeBytes", int(size * 1.15)),
         "recommended": bool(spec.get("recommended", False)),
-        "basedOn": spec["basedOn"],
+        "basedOn": spec.get("basedOn"),
         "license": spec["license"],
         "licenseURL": spec.get("licenseURL"),
         "release": tag,
@@ -248,7 +254,7 @@ def write_catalog(model_id: str, spec: dict, tag: str, parts: list[dict], sha: s
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("model", help="a key from sources.json, e.g. anvil-lite")
+    parser.add_argument("model", help="a key from sources.json, e.g. anvil-forge")
     parser.add_argument("--repo", default=DEFAULT_REPO)
     parser.add_argument("--skip-upload", action="store_true", help="do everything except touch GitHub")
     parser.add_argument("--push", action="store_true", help="commit and push models.json afterwards")

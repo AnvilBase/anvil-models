@@ -23,11 +23,11 @@ free, plus one part.
 ## Publishing a model
 
 ```sh
-scripts/publish_model.py anvil-lite --push
+scripts/publish_model.py anvil-forge --push
 ```
 
 That downloads the source (resumable — run it again if it drops), splits it,
-creates the `anvil-lite-v1` release, uploads the parts, rewrites `models.json`,
+creates the `anvil-forge-v1` release, uploads the parts, rewrites `models.json`,
 and pushes. The app picks it up on its next launch; there's nothing to deploy.
 
 Useful flags: `--skip-upload` for a dry run that stops before touching GitHub,
@@ -43,20 +43,20 @@ twice the model's size free while it runs.
 Add an entry to `sources.json` and run the script with its key:
 
 ```json
-"anvil-lite": {
-  "name": "Anvil Lite",
+"anvil-forge": {
+  "name": "Anvil Forge",
   "version": "1",
   "summary": "Runs entirely on your phone. Text, photos, and web search.",
-  "fileName": "anvil-lite.litertlm",
-  "source": "https://huggingface.co/…/gemma-4-E4B-it.litertlm",
-  "basedOn": "Gemma 4 E4B (litert-lm)",
+  "fileName": "anvil-forge.litertlm",
+  "source": "https://huggingface.co/…/the-upstream-file.litertlm",
   "license": "Apache-2.0",
+  "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
   "recommended": true,
   "minimumFreeBytes": 4500000000
 }
 ```
 
-`version` is part of the release tag (`anvil-lite-v1`) and is how the app knows
+`version` is part of the release tag (`anvil-forge-v1`) and is how the app knows
 an installed model is out of date. Bump it when the underlying file changes;
 re-running the script with the same version replaces the assets in place.
 
@@ -68,16 +68,24 @@ engine loads.
 The parts are plain byte ranges, in order:
 
 ```sh
-gh release download anvil-lite-v1 --repo AnvilBase/anvil-models --pattern '*.part*'
-cat anvil-lite.litertlm.part* > anvil-lite.litertlm
-shasum -a 256 anvil-lite.litertlm   # compare with sha256 in models.json
+gh release download anvil-forge-v1 --repo AnvilBase/anvil-models --pattern '*.part*'
+cat anvil-forge.litertlm.part* > anvil-forge.litertlm
+shasum -a 256 anvil-forge.litertlm   # compare with sha256 in models.json
 ```
 
 ## Licensing
 
-Anvil renames these models, it doesn't retrain them. Each entry in `models.json`
-carries the `basedOn` model and its `license`, and the app shows both before
-downloading. Anvil Lite and Anvil Nano are Gemma models, used under the
-[Gemma Terms of Use](https://ai.google.dev/gemma/terms) — which permit
-redistribution, including renamed, as long as those terms travel with the file
-and recipients are told what it's based on.
+Anvil renames these models, it doesn't retrain them. Every entry in
+`models.json` records the `license` the model is redistributed under, and the
+release carries the same, so the licence travels with the file.
+
+Anvil Forge is redistributed under the
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). Apache-2.0
+asks that the licence and any notices travel with the work; it does not require
+that a product keep the upstream's name, and section 6 grants no trademark
+rights, so renaming is the correct thing to do rather than a liberty taken. The
+`source` field in `sources.json` is what the file was built from — that's the
+build recipe and stays accurate.
+
+Check the upstream licence before adding a model. Not every open model is
+Apache-2.0, and some carry terms that do dictate naming and attribution.
