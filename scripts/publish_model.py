@@ -246,6 +246,7 @@ def write_catalog(model_id: str, spec: dict, tag: str, parts: list[dict], sha: s
         "name": spec["name"],
         "version": spec["version"],
         "summary": spec["summary"],
+        "parameters": spec.get("parameters"),
         "fileName": spec["fileName"],
         "sizeBytes": size,
         "sha256": sha,
