@@ -2,49 +2,6 @@
   "schemaVersion": 1,
   "models": [
     {
-      "id": "anvil-spark",
-      "name": "Anvil Spark",
-      "version": "1",
-      "summary": "Smaller and quicker",
-      "parameters": "2B",
-      "fileName": "anvil-spark.litertlm",
-      "sizeBytes": 2588147712,
-      "sha256": "181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c",
-      "minimumFreeBytes": 3200000000,
-      "recommended": true,
-      "basedOn": null,
-      "license": "Apache-2.0",
-      "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
-      "release": "anvil-spark-v1",
-      "parts": [
-        {
-          "name": "anvil-spark.litertlm.part000",
-          "sizeBytes": 536870912,
-          "sha256": "5e0d593e1a0c40a208438a426853c214207fb6e57cd89624ea422928e08b96e6"
-        },
-        {
-          "name": "anvil-spark.litertlm.part001",
-          "sizeBytes": 536870912,
-          "sha256": "5d616893da288d99ba514b45fd0d1534380fbfd0b151236caa9401560405433d"
-        },
-        {
-          "name": "anvil-spark.litertlm.part002",
-          "sizeBytes": 536870912,
-          "sha256": "c6896f207584f41a49528b0efbd860b0a9b033c866bf549cf64148de2e642dd6"
-        },
-        {
-          "name": "anvil-spark.litertlm.part003",
-          "sizeBytes": 536870912,
-          "sha256": "c6f7d6dfb378654e7e8678a0f3a254c656633ce3db0b6d21a3811f31f9d96fa4"
-        },
-        {
-          "name": "anvil-spark.litertlm.part004",
-          "sizeBytes": 440664064,
-          "sha256": "743c9802f8d44ebf88a8a8ad4c42241c55f910b09b387e68336ef57435c3824d"
-        }
-      ]
-    },
-    {
       "id": "anvil-forge",
       "name": "Anvil Forge",
       "version": "1",
@@ -94,6 +51,49 @@
           "name": "anvil-forge.litertlm.part006",
           "sizeBytes": 438304768,
           "sha256": "d7b9832aee549b43c8c5d715bc435b4df811d2db48b2b5c38fe498b5fbb7d922"
+        }
+      ]
+    },
+    {
+      "id": "anvil-spark",
+      "name": "Anvil Spark",
+      "version": "2",
+      "summary": "Compact and quick",
+      "parameters": "8B",
+      "fileName": "anvil-spark.litertlm",
+      "sizeBytes": 2559504338,
+      "sha256": "b85a3053f3b0f7c9cf4e7ba87dfa2e386054a5c6c7954e0f927d027fdfeaadf6",
+      "minimumFreeBytes": 2943429988,
+      "recommended": false,
+      "basedOn": null,
+      "license": "Apache-2.0",
+      "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
+      "release": "anvil-spark-v2",
+      "parts": [
+        {
+          "name": "anvil-spark.litertlm.part000",
+          "sizeBytes": 536870912,
+          "sha256": "5a9d664bae783312f5b0b6bc1439cf0c696452e82101ee08f073815a1c25dd29"
+        },
+        {
+          "name": "anvil-spark.litertlm.part001",
+          "sizeBytes": 536870912,
+          "sha256": "d89d3880b2058137b7e51baf7904dbd9f11b689c239001f0b1c60a5c1b662cbd"
+        },
+        {
+          "name": "anvil-spark.litertlm.part002",
+          "sizeBytes": 536870912,
+          "sha256": "533423c365c41a24101a759c4c8c92917b417b750d15ee301b6702a53a0256c0"
+        },
+        {
+          "name": "anvil-spark.litertlm.part003",
+          "sizeBytes": 536870912,
+          "sha256": "a44811dbe583df91fda04d2a5dae54719e924c616a129e46f0a5175193266042"
+        },
+        {
+          "name": "anvil-spark.litertlm.part004",
+          "sizeBytes": 412020690,
+          "sha256": "7c22dc9518197fa9547030cecb3a29a453fc347faf73eeef455bd1bfb7fabcec"
         }
       ]
     }
