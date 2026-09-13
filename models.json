@@ -45,6 +45,59 @@
       ]
     },
     {
+      "id": "anvil-blaze",
+      "name": "Anvil Blaze",
+      "version": "1",
+      "summary": "Larger model with deeper thinking",
+      "parameters": "4B",
+      "fileName": "anvil-blaze.litertlm",
+      "sizeBytes": 3659530240,
+      "sha256": "0b2a8980ce155fd97673d8e820b4d29d9c7d99b8fa6806f425d969b145bd52e0",
+      "minimumFreeBytes": 4208459775,
+      "recommended": false,
+      "basedOn": null,
+      "license": "Apache-2.0",
+      "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
+      "release": "anvil-blaze-v1",
+      "parts": [
+        {
+          "name": "anvil-blaze.litertlm.part000",
+          "sizeBytes": 536870912,
+          "sha256": "8b6de07f4c7fa40e56885a86d6f0dae232a1918df525243d0649784989ba8fb7"
+        },
+        {
+          "name": "anvil-blaze.litertlm.part001",
+          "sizeBytes": 536870912,
+          "sha256": "b995ff324b5a70ec78535419ec099e5036d638d0968d9d2ae3bf19738b847649"
+        },
+        {
+          "name": "anvil-blaze.litertlm.part002",
+          "sizeBytes": 536870912,
+          "sha256": "29d9c5e3db9e27d23f3c010be2a2befc3e7c2b573f260db5f140c7d36cb35502"
+        },
+        {
+          "name": "anvil-blaze.litertlm.part003",
+          "sizeBytes": 536870912,
+          "sha256": "8954401bc1f9da824047993ff7d46c33329c404986c192936563c49bf8854023"
+        },
+        {
+          "name": "anvil-blaze.litertlm.part004",
+          "sizeBytes": 536870912,
+          "sha256": "7dd95ec6b2f2085f7c31cd04daef92917542e2af9d1b731ec6044f47232391e6"
+        },
+        {
+          "name": "anvil-blaze.litertlm.part005",
+          "sizeBytes": 536870912,
+          "sha256": "4f52d5405c3c0b813bfb62236e29cd22f6e481c3210f8d38994a18ae2e53315b"
+        },
+        {
+          "name": "anvil-blaze.litertlm.part006",
+          "sizeBytes": 438304768,
+          "sha256": "d7b9832aee549b43c8c5d715bc435b4df811d2db48b2b5c38fe498b5fbb7d922"
+        }
+      ]
+    },
+    {
       "id": "anvil-spark",
       "name": "Anvil Spark",
       "version": "2",
