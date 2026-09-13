@@ -16,7 +16,13 @@ Apple Archive of Core ML models that Anvil Dream makes pictures with). `source`
 is a URL to download, or a path on this Mac for a model that is built rather
 than fetched — see scripts/build_anvil_dream.sh.
 
+Models are listed in the app in the order they appear in sources.json. One with
+no `source` yet is still listed, as an announcement the app shows as "Coming
+soon"; `--sync-catalog` rewrites models.json from sources.json — order, names,
+announcements — without publishing anything.
+
 Options:
+    --sync-catalog  Rewrite models.json from sources.json and stop.
     --skip-upload   Do everything except touching GitHub. Useful for a dry run.
     --push          git commit and push models.json when the upload succeeds.
     --repo OWNER/N  Publish somewhere other than AnvilBase/anvil-models.
@@ -266,13 +272,68 @@ def write_catalog(model_id: str, spec: dict, tag: str, parts: list[dict], sha: s
         "release": tag,
         "parts": parts,
     }
-    models = [m for m in catalog.get("models", []) if m.get("id") != model_id]
-    models.append(entry)
-    # Recommended first, then alphabetically, so the app can render the list as it comes.
-    models.sort(key=lambda m: (not m.get("recommended"), m.get("name", "")))
-    catalog["schemaVersion"] = 1
-    catalog["models"] = models
-    CATALOG.write_text(json.dumps(catalog, indent=2) + "\n")
+    published = [m for m in catalog.get("models", []) if m.get("id") != model_id]
+    published.append(entry)
+    sync_catalog(json.loads(SOURCES.read_text()), published)
+
+
+def announcement(model_id: str, spec: dict) -> dict:
+    """A catalog entry for a model that is named but not yet published.
+
+    The app lists it in its place — "Anvil Raw", "Coming soon" — with nothing to download: no
+    parts, no size, no hash. It becomes a real entry the day publish_model.py runs for it.
+    """
+    return {
+        "id": model_id,
+        "name": spec["name"],
+        "version": spec["version"],
+        "kind": kind_of(spec),
+        "summary": spec["summary"],
+        "parameters": spec.get("parameters"),
+        "fileName": spec["fileName"],
+        "sizeBytes": 0,
+        "sha256": "",
+        "minimumFreeBytes": None,
+        "recommended": bool(spec.get("recommended", False)),
+        "pro": bool(spec.get("pro", False)),
+        "basedOn": spec.get("basedOn"),
+        "license": spec["license"],
+        "licenseURL": spec.get("licenseURL"),
+        "comingSoon": True,
+        "parts": [],
+    }
+
+
+def sync_catalog(sources: dict, published: list[dict] | None = None) -> None:
+    """Rewrite models.json in the order sources.json lists its models.
+
+    Every model in sources.json gets an entry: the published one when there is one, an
+    announcement otherwise. The order is the order the app shows them in — Settings and the
+    install screen both render the list as it comes — so it is decided here, in one place, and
+    the name of a model is always what sources.json says it is now.
+    """
+    if published is None:
+        catalog = json.loads(CATALOG.read_text()) if CATALOG.exists() else {}
+        published = [m for m in catalog.get("models", []) if not m.get("comingSoon")]
+    by_id = {m["id"]: m for m in published}
+    models = []
+    for model_id, spec in sources["models"].items():
+        entry = by_id.get(model_id)
+        if entry is None:
+            entry = announcement(model_id, spec)
+        else:
+            # The name, summary and flags follow sources.json; the bytes and hashes stay.
+            entry.update(
+                name=spec["name"],
+                summary=spec["summary"],
+                parameters=spec.get("parameters"),
+                recommended=bool(spec.get("recommended", False)),
+                pro=bool(spec.get("pro", False)),
+                basedOn=spec.get("basedOn"),
+            )
+            entry.pop("comingSoon", None)
+        models.append(entry)
+    CATALOG.write_text(json.dumps({"schemaVersion": 1, "models": models}, indent=2) + "\n")
     print(f"  wrote {CATALOG.relative_to(ROOT)}")
 
 
@@ -316,14 +377,27 @@ def check_source(model_id: str, spec: dict) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("model", help="a key from sources.json, e.g. anvil-forge")
+    parser.add_argument("model", nargs="?", help="a key from sources.json, e.g. anvil-forge")
     parser.add_argument("--repo", default=DEFAULT_REPO)
     parser.add_argument("--skip-upload", action="store_true", help="do everything except touch GitHub")
     parser.add_argument("--push", action="store_true", help="commit and push models.json afterwards")
     parser.add_argument("--keep-work", action="store_true", help="keep the download and the parts")
+    parser.add_argument(
+        "--sync-catalog", action="store_true",
+        help="rewrite models.json from sources.json — names, order, announcements — publishing nothing")
     args = parser.parse_args()
 
     sources = json.loads(SOURCES.read_text())
+    if args.sync_catalog:
+        print("catalog")
+        sync_catalog(sources)
+        if args.push:
+            run(["git", "-C", str(ROOT), "add", "models.json"])
+            run(["git", "-C", str(ROOT), "commit", "-m", "Sync the catalog with sources.json"])
+            run(["git", "-C", str(ROOT), "push"])
+        return
+    if not args.model:
+        parser.error("a model to publish, or --sync-catalog")
     spec = sources["models"].get(args.model)
     if spec is None:
         sys.exit(f"{args.model} is not in sources.json. Known: {', '.join(sources['models'])}")

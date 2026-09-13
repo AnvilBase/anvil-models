@@ -5,21 +5,23 @@ The model catalog for [Anvil](https://www.anvilai.com). The app reads
 repository with every download URL pointed back at anvilai.com. The bytes
 themselves live in this repository's GitHub releases.
 
-The catalog offers one model to everyone: the **Anvil Model** (`anvil-forge`,
-built from Gemma 4 E2B). The app's install screen shows it by that name with its
-size and parameter count, and installs nothing else. Keep it that way — the app
-is built around there being one model to download, not a choice.
+The catalog lists three models, in this order — the order the app shows them
+in, on the install screen and in Settings › Models:
 
-A second model, **Anvil Core** (`anvil-core`), is for Anvil Pro. Its entry
-carries `"pro": true`, which the app reads as: list it in Settings › Model
-behind the Pro badge, and download or switch to it only while Pro is active.
-It is built from HauhauCS's uncensored Gemma 4 E4B, which is published only as
-GGUF. The app's engine loads `.litertlm` alone, so the entry sits in
-`sources.json` with no `source` until a `.litertlm` build of it exists; the
-publish script refuses to publish it before then, and it is not in
-`models.json`.
+1. **Anvil Core** (`anvil-forge`, built from Gemma 4 E2B), the everyday model,
+   free to everyone. The key stays `anvil-forge`: it is how installed copies
+   are matched to the catalog.
+2. **Anvil Raw** (`anvil-raw`), the unrestricted model, for Anvil Pro. Its
+   entry carries `"pro": true`, which the app reads as: list it behind the Pro
+   badge, and download or switch to it only while Pro is active. It is built
+   from HauhauCS's uncensored Gemma 4 E4B, which is published only as GGUF.
+   The app's engine loads `.litertlm` alone, so the entry sits in
+   `sources.json` with no `source` until a `.litertlm` build of it exists.
+   Until then `models.json` carries it as an announcement (`"comingSoon":
+   true`, no parts), which the app lists in its place as "Coming soon".
+3. **Anvil Dream** (`anvil-dream`), the image model, for Anvil Pro.
 
-A third, **Anvil Dream** (`anvil-dream`), is also for Anvil Pro and is a
+Anvil Dream is a
 different kind of model: `"kind": "image"`. It makes pictures rather than
 text. The app runs it beside whichever chat model is loaded, through a
 `generate_image` tool the chat model calls when someone asks for a picture. It
@@ -41,7 +43,7 @@ free, plus one part.
 
 | File | Role |
 | --- | --- |
-| `models.json` | The catalog the app reads: the model, with its parts and their hashes. Generated — don't hand-edit it. |
+| `models.json` | The catalog the app reads: every model in order, with its parts and their hashes. Generated — don't hand-edit it; `scripts/publish_model.py --sync-catalog` rewrites it from `sources.json`. |
 | `sources.json` | Where each model comes from and what it's called in Anvil. This is the file you edit. |
 | `scripts/publish_model.py` | Downloads (or picks up) a source model, splits it, uploads the parts, and rewrites `models.json`. |
 | `scripts/build_anvil_dream.sh` | Builds Anvil Dream: fetches LCM Dreamshaper v7, folds its guidance scale into the weights, converts to Core ML with Apple's converter, and packs the result as `build/anvil-dream.aar`. |
@@ -72,9 +74,9 @@ upstream file, bump `version`, and run the script:
 
 ```json
 "anvil-forge": {
-  "name": "Anvil Model",
+  "name": "Anvil Core",
   "version": "3",
-  "summary": "Runs entirely on your phone",
+  "summary": "The everyday model",
   "parameters": "2B",
   "fileName": "anvil-forge.litertlm",
   "source": "https://huggingface.co/…/the-upstream-file.litertlm",
@@ -92,7 +94,7 @@ and an installed copy is matched to the catalog by it.
 
 `parameters` is the model's size the way models are sized ("2B"), shown beside
 the file size on the install screen. `pro` marks a model as part of Anvil Pro;
-leave it off the Anvil Model. `upstream` is documentation only — where a model
+leave it off Anvil Core. `upstream` is documentation only — where a model
 comes from when `source` can't point at it yet.
 
 Only `.litertlm` files built for LiteRT-LM work — that's the format the app's
@@ -142,7 +144,7 @@ Anvil renames the model, it doesn't retrain it. The entry in `models.json`
 records the `license` the model is redistributed under, and the release carries
 the same, so the licence travels with the file.
 
-The Anvil Model is Gemma 4 E2B, redistributed under the
+Anvil Core is Gemma 4 E2B, redistributed under the
 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). Apache-2.0
 asks that the licence and any notices travel with the work; it does not require
 that a product keep the upstream's name, and section 6 grants no trademark
@@ -150,7 +152,7 @@ rights, so renaming is the correct thing to do rather than a liberty taken. The
 `source` field in `sources.json` is what the file was built from — that's the
 build recipe and stays accurate.
 
-Anvil Core is Gemma 4 E4B with its refusals removed, redistributed under the
+Anvil Raw is Gemma 4 E4B with its refusals removed, redistributed under the
 [Gemma Terms of Use](https://ai.google.dev/gemma/terms) rather than Apache-2.0.
 Those terms travel with every copy and include Google's Prohibited Use Policy,
 which binds whoever runs the model whatever the weights will say; the app

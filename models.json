@@ -3,9 +3,9 @@
   "models": [
     {
       "id": "anvil-forge",
-      "name": "Anvil Model",
+      "name": "Anvil Core",
       "version": "2",
-      "summary": "Runs entirely on your phone",
+      "summary": "The everyday model",
       "parameters": "2B",
       "fileName": "anvil-forge.litertlm",
       "sizeBytes": 2588147712,
@@ -42,7 +42,27 @@
           "sizeBytes": 440664064,
           "sha256": "743c9802f8d44ebf88a8a8ad4c42241c55f910b09b387e68336ef57435c3824d"
         }
-      ]
+      ],
+      "pro": false
+    },
+    {
+      "id": "anvil-raw",
+      "name": "Anvil Raw",
+      "version": "1",
+      "kind": "text",
+      "summary": "Unrestricted. Answers without refusing",
+      "parameters": "4B",
+      "fileName": "anvil-raw.litertlm",
+      "sizeBytes": 0,
+      "sha256": "",
+      "minimumFreeBytes": null,
+      "recommended": false,
+      "pro": true,
+      "basedOn": "Gemma 4 E4B, uncensored by HauhauCS",
+      "license": "Gemma Terms of Use",
+      "licenseURL": "https://ai.google.dev/gemma/terms",
+      "comingSoon": true,
+      "parts": []
     },
     {
       "id": "anvil-dream",
