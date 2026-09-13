@@ -25,6 +25,22 @@
       "licenseURL": "https://ai.google.dev/gemma/terms",
       "recommended": false,
       "pro": true
+    },
+    "anvil-dream": {
+      "name": "Anvil Dream",
+      "version": "1",
+      "kind": "image",
+      "summary": "Makes pictures from words",
+      "parameters": "0.9B",
+      "fileName": "anvil-dream.aar",
+      "source": "build/anvil-dream.aar",
+      "upstream": "https://huggingface.co/SimianLuo/LCM_Dreamshaper_v7",
+      "basedOn": "LCM Dreamshaper v7, converted to Core ML",
+      "license": "MIT",
+      "licenseURL": "https://huggingface.co/SimianLuo/LCM_Dreamshaper_v7",
+      "minimumFreeBytes": 3000000000,
+      "recommended": false,
+      "pro": true
     }
   }
 }

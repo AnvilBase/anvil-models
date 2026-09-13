@@ -19,6 +19,17 @@ GGUF. The app's engine loads `.litertlm` alone, so the entry sits in
 publish script refuses to publish it before then, and it is not in
 `models.json`.
 
+A third, **Anvil Dream** (`anvil-dream`), is also for Anvil Pro and is a
+different kind of model: `"kind": "image"`. It makes pictures rather than
+text. The app runs it beside whichever chat model is loaded, through a
+`generate_image` tool the chat model calls when someone asks for a picture. It
+is [LCM Dreamshaper v7](https://huggingface.co/SimianLuo/LCM_Dreamshaper_v7),
+a Latent Consistency Model distilled from Stable Diffusion 1.5, converted to
+Core ML for the Neural Engine and shipped as an Apple Archive (`.aar`) of the
+compiled models, which the app unpacks on the phone. It isn't downloaded from
+anywhere: `scripts/build_anvil_dream.sh` builds it on a Mac, and `source` in
+`sources.json` points at what it built.
+
 Nothing large is committed here. A `.litertlm` file is several gigabytes; git
 caps a file at 100 MB and a GitHub release asset at 2 GiB, so each model is
 **split into 512 MB parts** and uploaded as release assets. The app downloads
@@ -32,7 +43,9 @@ free, plus one part.
 | --- | --- |
 | `models.json` | The catalog the app reads: the model, with its parts and their hashes. Generated — don't hand-edit it. |
 | `sources.json` | Where each model comes from and what it's called in Anvil. This is the file you edit. |
-| `scripts/publish_model.py` | Downloads a source model, splits it, uploads the parts, and rewrites `models.json`. |
+| `scripts/publish_model.py` | Downloads (or picks up) a source model, splits it, uploads the parts, and rewrites `models.json`. |
+| `scripts/build_anvil_dream.sh` | Builds Anvil Dream: fetches LCM Dreamshaper v7, folds its guidance scale into the weights, converts to Core ML with Apple's converter, and packs the result as `build/anvil-dream.aar`. |
+| `scripts/fold_lcm_guidance.py` | The folding step, on its own: what makes an LCM U-Net look like a plain Stable Diffusion U-Net to the converter. |
 
 ## Publishing a model
 
@@ -87,6 +100,32 @@ engine loads — and the script refuses anything else. A GGUF has to be converte
 first, from the model's safetensors with Google's LiteRT-LM tooling; there is no
 GGUF-to-litertlm path.
 
+`kind` says which of the app's engines a model is for. Left out, it is `text`.
+An `image` model's `fileName` ends in `.aar` and its `source` is usually a path
+in this repository rather than a URL: the file is built, not fetched.
+
+## Building Anvil Dream
+
+```sh
+scripts/build_anvil_dream.sh            # about an hour; needs uv, Xcode's tools, 20 GB free
+scripts/publish_model.py anvil-dream --push
+```
+
+The build fetches the diffusers weights, then does the one thing that makes an
+LCM convertible: an LCM U-Net takes an extra input, the embedding of the
+guidance scale that classifier-free guidance was distilled into, and Apple's
+converter has no idea what to do with it. That embedding only ever enters the
+network as a constant added just before one linear layer, so for a fixed
+guidance scale (8.0, the model card's number) it is folded into that layer's
+bias — `scripts/fold_lcm_guidance.py`, which checks its own work against the
+unfolded model to about 1e-6. What comes out is a plain Stable Diffusion 1.5
+U-Net, converted like any other: split-einsum attention for the Neural Engine,
+6-bit palettized weights, a batch of one because there is no guidance pass, and
+the U-Net in two chunks. The app supplies the LCM sampler itself, in Swift.
+
+The result is about a gigabyte and makes a 512×512 picture in four passes of
+the network.
+
 ## Putting a model together by hand
 
 The parts are plain byte ranges, in order:
@@ -116,6 +155,11 @@ Anvil Core is Gemma 4 E4B with its refusals removed, redistributed under the
 Those terms travel with every copy and include Google's Prohibited Use Policy,
 which binds whoever runs the model whatever the weights will say; the app
 offers the model under those terms and the catalog entry records them.
+
+Anvil Dream is LCM Dreamshaper v7, which its author publishes under the
+[MIT License](https://huggingface.co/SimianLuo/LCM_Dreamshaper_v7). It was
+distilled from Dreamshaper v7, a fine-tune of Stable Diffusion 1.5; the
+upstream model card is the place to check for anything those carry with them.
 
 Check the upstream licence before swapping in a different model. Not every
 open model is Apache-2.0, and some carry terms that do dictate naming and

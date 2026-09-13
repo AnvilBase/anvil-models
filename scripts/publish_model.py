@@ -11,6 +11,11 @@ Steps: download the source (resumable), split it into parts, hash everything,
 create or reuse the release, upload the parts, and rewrite models.json. Run it
 again after an interrupted run; finished work is reused.
 
+A model's `kind` is "text" (a .litertlm file the chat runs on) or "image" (an
+Apple Archive of Core ML models that Anvil Dream makes pictures with). `source`
+is a URL to download, or a path on this Mac for a model that is built rather
+than fetched — see scripts/build_anvil_dream.sh.
+
 Options:
     --skip-upload   Do everything except touching GitHub. Useful for a dry run.
     --push          git commit and push models.json when the upload succeeds.
@@ -245,6 +250,7 @@ def write_catalog(model_id: str, spec: dict, tag: str, parts: list[dict], sha: s
         "id": model_id,
         "name": spec["name"],
         "version": spec["version"],
+        "kind": kind_of(spec),
         "summary": spec["summary"],
         "parameters": spec.get("parameters"),
         "fileName": spec["fileName"],
@@ -270,6 +276,41 @@ def write_catalog(model_id: str, spec: dict, tag: str, parts: list[dict], sha: s
     print(f"  wrote {CATALOG.relative_to(ROOT)}")
 
 
+# --- what kind of model -----------------------------------------------------
+
+# The app has one engine per kind and each loads exactly one format: LiteRT-LM reads .litertlm, and
+# Anvil Dream unpacks an Apple Archive of Core ML models. Anything else would split, upload and
+# download fine, and then fail on every phone — so it is refused here, before any of that.
+KINDS = {"text": ".litertlm", "image": ".aar"}
+
+
+def kind_of(spec: dict) -> str:
+    kind = spec.get("kind", "text")
+    if kind not in KINDS:
+        sys.exit(f"Unknown kind {kind!r}. One of: {', '.join(KINDS)}.")
+    return kind
+
+
+def check_source(model_id: str, spec: dict) -> str:
+    """The source to publish from, refused when there isn't one or it is the wrong format."""
+    kind = kind_of(spec)
+    expected = KINDS[kind]
+    source = spec.get("source")
+    if not source:
+        upstream = spec.get("upstream", "an upstream file")
+        sys.exit(
+            f"{model_id} has no source to publish yet: it needs a {expected} build of {upstream}. "
+            "Point \"source\" at one in sources.json and run again."
+        )
+    if not source.split("?")[0].endswith(expected):
+        what = "a .litertlm file, which is the only format the app's chat engine loads" if kind == "text" \
+            else "an .aar of Core ML models, which is the only format Anvil Dream unpacks"
+        sys.exit(f"{model_id}'s source is not {what}: {source}")
+    if not spec["fileName"].endswith(expected):
+        sys.exit(f"{model_id}'s fileName must end in {expected}: {spec['fileName']}")
+    return source
+
+
 # --- main -------------------------------------------------------------------
 
 
@@ -287,17 +328,7 @@ def main() -> None:
     if spec is None:
         sys.exit(f"{args.model} is not in sources.json. Known: {', '.join(sources['models'])}")
 
-    # The app's engine is LiteRT-LM and loads nothing but .litertlm. A GGUF would split, upload and
-    # download fine, and then fail to load on every phone — so it is refused here, before any of that.
-    source = spec.get("source")
-    if not source:
-        upstream = spec.get("upstream", "an upstream file")
-        sys.exit(
-            f"{args.model} has no source to publish yet: it needs a .litertlm build of {upstream}. "
-            "Point \"source\" at one in sources.json and run again."
-        )
-    if not source.split("?")[0].endswith(".litertlm"):
-        sys.exit(f"{args.model}'s source is not a .litertlm file, which is the only format the app loads: {source}")
+    source = check_source(args.model, spec)
 
     part_size = int(sources.get("partSizeBytes", 512 * 1024 * 1024))
     if part_size > 2 * 1024**3:
@@ -311,7 +342,16 @@ def main() -> None:
 
     print(f"\n{spec['name']}  ({args.model}, release {tag})")
     print(f"\nsource  {source}")
-    download(source, source_file)
+    if source.startswith(("http://", "https://")):
+        download(source, source_file)
+    else:
+        # A model built on this Mac rather than fetched: the path is relative to the repository.
+        built = Path(source) if Path(source).is_absolute() else ROOT / source
+        if not built.is_file():
+            sys.exit(f"{built} doesn't exist. Build it first (see the README), then publish.")
+        if built.resolve() != source_file.resolve():
+            shutil.copyfile(built, source_file)
+        print(f"  using the built file ({human(source_file.stat().st_size)})")
 
     size = source_file.stat().st_size
     print(f"\nsplitting {human(size)} into {part_size // 1024 // 1024} MB parts")

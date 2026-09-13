@@ -43,6 +43,36 @@
           "sha256": "743c9802f8d44ebf88a8a8ad4c42241c55f910b09b387e68336ef57435c3824d"
         }
       ]
+    },
+    {
+      "id": "anvil-dream",
+      "name": "Anvil Dream",
+      "version": "1",
+      "kind": "image",
+      "summary": "Makes pictures from words",
+      "parameters": "0.9B",
+      "fileName": "anvil-dream.aar",
+      "sizeBytes": 871229856,
+      "sha256": "48a999192f06fdcb0a683e9e804d4572e86c1ad6d3fe586a6b2b70fdc5032e92",
+      "minimumFreeBytes": 3000000000,
+      "recommended": false,
+      "pro": true,
+      "basedOn": "LCM Dreamshaper v7, converted to Core ML",
+      "license": "MIT",
+      "licenseURL": "https://huggingface.co/SimianLuo/LCM_Dreamshaper_v7",
+      "release": "anvil-dream-v1",
+      "parts": [
+        {
+          "name": "anvil-dream.aar.part000",
+          "sizeBytes": 536870912,
+          "sha256": "7fc447258061c9bdae98db8a5562ff48b13373ecfa059bd759f30f883a39c4a4"
+        },
+        {
+          "name": "anvil-dream.aar.part001",
+          "sizeBytes": 334358944,
+          "sha256": "8cdda951d53f59d84b5566396dd2b171ca1f6431e53c751817646144f5d9462f"
+        }
+      ]
     }
   ]
 }
