@@ -13,12 +13,11 @@ in, on the install screen and in Settings › Models:
    are matched to the catalog.
 2. **Anvil Raw** (`anvil-raw`), the unrestricted model, for Anvil Pro. Its
    entry carries `"pro": true`, which the app reads as: list it behind the Pro
-   badge, and download or switch to it only while Pro is active. It is built
-   from HauhauCS's uncensored Gemma 4 E4B, which is published only as GGUF.
-   The app's engine loads `.litertlm` alone, so the entry sits in
-   `sources.json` with no `source` until a `.litertlm` build of it exists.
-   Until then `models.json` carries it as an announcement (`"comingSoon":
-   true`, no parts), which the app lists in its place as "Coming soon".
+   badge, and download or switch to it only while Pro is active. It is
+   HauhauCS's uncensored Gemma 4 E4B, which is published only as GGUF; the
+   `.litertlm` the app loads is rebuilt from it with the scripts in
+   `scripts/build_anvil_raw/` (see the README there), and `source` points at
+   the result in `build/`.
 3. **Anvil Dream** (`anvil-dream`), the image model, for Anvil Pro.
 
 Anvil Dream is a
@@ -46,6 +45,7 @@ free, plus one part.
 | `models.json` | The catalog the app reads: every model in order, with its parts and their hashes. Generated — don't hand-edit it; `scripts/publish_model.py --sync-catalog` rewrites it from `sources.json`. |
 | `sources.json` | Where each model comes from and what it's called in Anvil. This is the file you edit. |
 | `scripts/publish_model.py` | Downloads (or picks up) a source model, splits it, uploads the parts, and rewrites `models.json`. |
+| `scripts/build_anvil_raw/` | Builds Anvil Raw: dequantises HauhauCS's GGUF back to a checkpoint and exports it to `.litertlm` with Google's tooling and Gemma 4 recipe. |
 | `scripts/build_anvil_dream.sh` | Builds Anvil Dream: fetches LCM Dreamshaper v7, folds its guidance scale into the weights, converts to Core ML with Apple's converter, and packs the result as `build/anvil-dream.aar`. |
 | `scripts/fold_lcm_guidance.py` | The folding step, on its own: what makes an LCM U-Net look like a plain Stable Diffusion U-Net to the converter. |
 

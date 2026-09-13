@@ -18,13 +18,14 @@
       "summary": "Unrestricted. Answers without refusing",
       "parameters": "4B",
       "fileName": "anvil-raw.litertlm",
-      "source": null,
+      "source": "build/anvil-raw.litertlm",
       "upstream": "https://huggingface.co/HauhauCS/Gemma-4-E4B-Uncensored-HauhauCS-Aggressive",
       "basedOn": "Gemma 4 E4B, uncensored by HauhauCS",
       "license": "Gemma Terms of Use",
       "licenseURL": "https://ai.google.dev/gemma/terms",
       "recommended": false,
-      "pro": true
+      "pro": true,
+      "minimumFreeBytes": 5000000000
     },
     "anvil-dream": {
       "name": "Anvil Dream",
