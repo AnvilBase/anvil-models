@@ -252,6 +252,8 @@ def write_catalog(model_id: str, spec: dict, tag: str, parts: list[dict], sha: s
         "sha256": sha,
         "minimumFreeBytes": spec.get("minimumFreeBytes", int(size * 1.15)),
         "recommended": bool(spec.get("recommended", False)),
+        # Anvil Pro only. The app shows the model behind the paywall until Pro is active.
+        "pro": bool(spec.get("pro", False)),
         "basedOn": spec.get("basedOn"),
         "license": spec["license"],
         "licenseURL": spec.get("licenseURL"),
@@ -285,6 +287,18 @@ def main() -> None:
     if spec is None:
         sys.exit(f"{args.model} is not in sources.json. Known: {', '.join(sources['models'])}")
 
+    # The app's engine is LiteRT-LM and loads nothing but .litertlm. A GGUF would split, upload and
+    # download fine, and then fail to load on every phone — so it is refused here, before any of that.
+    source = spec.get("source")
+    if not source:
+        upstream = spec.get("upstream", "an upstream file")
+        sys.exit(
+            f"{args.model} has no source to publish yet: it needs a .litertlm build of {upstream}. "
+            "Point \"source\" at one in sources.json and run again."
+        )
+    if not source.split("?")[0].endswith(".litertlm"):
+        sys.exit(f"{args.model}'s source is not a .litertlm file, which is the only format the app loads: {source}")
+
     part_size = int(sources.get("partSizeBytes", 512 * 1024 * 1024))
     if part_size > 2 * 1024**3:
         sys.exit("partSizeBytes must stay under 2 GiB, the GitHub release asset limit.")
@@ -296,8 +310,8 @@ def main() -> None:
     tag = f"{args.model}-v{spec['version']}"
 
     print(f"\n{spec['name']}  ({args.model}, release {tag})")
-    print(f"\nsource  {spec['source']}")
-    download(spec["source"], source_file)
+    print(f"\nsource  {source}")
+    download(source, source_file)
 
     size = source_file.stat().st_size
     print(f"\nsplitting {human(size)} into {part_size // 1024 // 1024} MB parts")

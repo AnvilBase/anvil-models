@@ -1,21 +1,10 @@
 {
   "partSizeBytes": 536870912,
   "models": {
-    "anvil-spark": {
-      "name": "Anvil Spark",
-      "version": "2",
-      "summary": "Compact and quick",
-      "parameters": "8B",
-      "fileName": "anvil-spark.litertlm",
-      "source": "https://huggingface.co/litert-community/Ternary-Bonsai-8B/resolve/main/bonsai-8b-int2pc-32k-crashfix.litertlm",
-      "license": "Apache-2.0",
-      "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
-      "recommended": false
-    },
     "anvil-forge": {
-      "name": "Anvil Forge",
+      "name": "Anvil Model",
       "version": "2",
-      "summary": "The everyday model",
+      "summary": "Runs entirely on your phone",
       "parameters": "2B",
       "fileName": "anvil-forge.litertlm",
       "source": "https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm/resolve/main/gemma-4-E2B-it.litertlm",
@@ -23,16 +12,19 @@
       "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
       "recommended": true
     },
-    "anvil-blaze": {
-      "name": "Anvil Blaze",
+    "anvil-core": {
+      "name": "Anvil Core",
       "version": "1",
-      "summary": "Larger model with deeper thinking",
+      "summary": "Unrestricted. Answers without refusing",
       "parameters": "4B",
-      "fileName": "anvil-blaze.litertlm",
-      "source": "https://huggingface.co/litert-community/gemma-4-E4B-it-litert-lm/resolve/main/gemma-4-E4B-it.litertlm",
-      "license": "Apache-2.0",
-      "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
-      "recommended": false
+      "fileName": "anvil-core.litertlm",
+      "source": null,
+      "upstream": "https://huggingface.co/HauhauCS/Gemma-4-E4B-Uncensored-HauhauCS-Aggressive",
+      "basedOn": "Gemma 4 E4B, uncensored by HauhauCS",
+      "license": "Gemma Terms of Use",
+      "licenseURL": "https://ai.google.dev/gemma/terms",
+      "recommended": false,
+      "pro": true
     }
   }
 }

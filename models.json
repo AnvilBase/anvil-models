@@ -3,9 +3,9 @@
   "models": [
     {
       "id": "anvil-forge",
-      "name": "Anvil Forge",
+      "name": "Anvil Model",
       "version": "2",
-      "summary": "The everyday model",
+      "summary": "Runs entirely on your phone",
       "parameters": "2B",
       "fileName": "anvil-forge.litertlm",
       "sizeBytes": 2588147712,
@@ -41,102 +41,6 @@
           "name": "anvil-forge.litertlm.part004",
           "sizeBytes": 440664064,
           "sha256": "743c9802f8d44ebf88a8a8ad4c42241c55f910b09b387e68336ef57435c3824d"
-        }
-      ]
-    },
-    {
-      "id": "anvil-blaze",
-      "name": "Anvil Blaze",
-      "version": "1",
-      "summary": "Larger model with deeper thinking",
-      "parameters": "4B",
-      "fileName": "anvil-blaze.litertlm",
-      "sizeBytes": 3659530240,
-      "sha256": "0b2a8980ce155fd97673d8e820b4d29d9c7d99b8fa6806f425d969b145bd52e0",
-      "minimumFreeBytes": 4208459775,
-      "recommended": false,
-      "basedOn": null,
-      "license": "Apache-2.0",
-      "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
-      "release": "anvil-blaze-v1",
-      "parts": [
-        {
-          "name": "anvil-blaze.litertlm.part000",
-          "sizeBytes": 536870912,
-          "sha256": "8b6de07f4c7fa40e56885a86d6f0dae232a1918df525243d0649784989ba8fb7"
-        },
-        {
-          "name": "anvil-blaze.litertlm.part001",
-          "sizeBytes": 536870912,
-          "sha256": "b995ff324b5a70ec78535419ec099e5036d638d0968d9d2ae3bf19738b847649"
-        },
-        {
-          "name": "anvil-blaze.litertlm.part002",
-          "sizeBytes": 536870912,
-          "sha256": "29d9c5e3db9e27d23f3c010be2a2befc3e7c2b573f260db5f140c7d36cb35502"
-        },
-        {
-          "name": "anvil-blaze.litertlm.part003",
-          "sizeBytes": 536870912,
-          "sha256": "8954401bc1f9da824047993ff7d46c33329c404986c192936563c49bf8854023"
-        },
-        {
-          "name": "anvil-blaze.litertlm.part004",
-          "sizeBytes": 536870912,
-          "sha256": "7dd95ec6b2f2085f7c31cd04daef92917542e2af9d1b731ec6044f47232391e6"
-        },
-        {
-          "name": "anvil-blaze.litertlm.part005",
-          "sizeBytes": 536870912,
-          "sha256": "4f52d5405c3c0b813bfb62236e29cd22f6e481c3210f8d38994a18ae2e53315b"
-        },
-        {
-          "name": "anvil-blaze.litertlm.part006",
-          "sizeBytes": 438304768,
-          "sha256": "d7b9832aee549b43c8c5d715bc435b4df811d2db48b2b5c38fe498b5fbb7d922"
-        }
-      ]
-    },
-    {
-      "id": "anvil-spark",
-      "name": "Anvil Spark",
-      "version": "2",
-      "summary": "Compact and quick",
-      "parameters": "8B",
-      "fileName": "anvil-spark.litertlm",
-      "sizeBytes": 2559504338,
-      "sha256": "b85a3053f3b0f7c9cf4e7ba87dfa2e386054a5c6c7954e0f927d027fdfeaadf6",
-      "minimumFreeBytes": 2943429988,
-      "recommended": false,
-      "basedOn": null,
-      "license": "Apache-2.0",
-      "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
-      "release": "anvil-spark-v2",
-      "parts": [
-        {
-          "name": "anvil-spark.litertlm.part000",
-          "sizeBytes": 536870912,
-          "sha256": "5a9d664bae783312f5b0b6bc1439cf0c696452e82101ee08f073815a1c25dd29"
-        },
-        {
-          "name": "anvil-spark.litertlm.part001",
-          "sizeBytes": 536870912,
-          "sha256": "d89d3880b2058137b7e51baf7904dbd9f11b689c239001f0b1c60a5c1b662cbd"
-        },
-        {
-          "name": "anvil-spark.litertlm.part002",
-          "sizeBytes": 536870912,
-          "sha256": "533423c365c41a24101a759c4c8c92917b417b750d15ee301b6702a53a0256c0"
-        },
-        {
-          "name": "anvil-spark.litertlm.part003",
-          "sizeBytes": 536870912,
-          "sha256": "a44811dbe583df91fda04d2a5dae54719e924c616a129e46f0a5175193266042"
-        },
-        {
-          "name": "anvil-spark.litertlm.part004",
-          "sizeBytes": 412020690,
-          "sha256": "7c22dc9518197fa9547030cecb3a29a453fc347faf73eeef455bd1bfb7fabcec"
         }
       ]
     }
