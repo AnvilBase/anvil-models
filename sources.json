@@ -1,29 +1,38 @@
 {
   "partSizeBytes": 536870912,
   "models": {
-    "anvil-forge": {
-      "name": "Anvil Forge",
-      "version": "1",
-      "summary": "The larger model. Needs an iPhone with memory to spare.",
-      "parameters": "4B",
-      "fileName": "anvil-forge.litertlm",
-      "source": "https://huggingface.co/litert-community/gemma-4-E4B-it-litert-lm/resolve/main/gemma-4-E4B-it.litertlm",
-      "license": "Apache-2.0",
-      "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
-      "recommended": false,
-      "minimumFreeBytes": 4500000000
-    },
     "anvil-spark": {
       "name": "Anvil Spark",
-      "version": "1",
-      "summary": "Smaller and quicker. The one to pick if Forge won't load.",
-      "parameters": "2B",
+      "version": "2",
+      "summary": "Compact and quick",
+      "parameters": "8B",
       "fileName": "anvil-spark.litertlm",
+      "source": "https://huggingface.co/litert-community/Ternary-Bonsai-8B/resolve/main/bonsai-8b-int2pc-32k-crashfix.litertlm",
+      "license": "Apache-2.0",
+      "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
+      "recommended": false
+    },
+    "anvil-forge": {
+      "name": "Anvil Forge",
+      "version": "2",
+      "summary": "The everyday model",
+      "parameters": "2B",
+      "fileName": "anvil-forge.litertlm",
       "source": "https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm/resolve/main/gemma-4-E2B-it.litertlm",
       "license": "Apache-2.0",
       "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
-      "recommended": true,
-      "minimumFreeBytes": 3200000000
+      "recommended": true
+    },
+    "anvil-blaze": {
+      "name": "Anvil Blaze",
+      "version": "1",
+      "summary": "Larger model with deeper thinking",
+      "parameters": "4B",
+      "fileName": "anvil-blaze.litertlm",
+      "source": "https://huggingface.co/litert-community/gemma-4-E4B-it-litert-lm/resolve/main/gemma-4-E4B-it.litertlm",
+      "license": "Apache-2.0",
+      "licenseURL": "https://www.apache.org/licenses/LICENSE-2.0",
+      "recommended": false
     }
   }
 }
