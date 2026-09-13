@@ -53,16 +53,57 @@
       "summary": "Unrestricted. Answers without refusing",
       "parameters": "4B",
       "fileName": "anvil-raw.litertlm",
-      "sizeBytes": 0,
-      "sha256": "",
-      "minimumFreeBytes": null,
+      "sizeBytes": 4166094048,
+      "sha256": "abf23e6dd1cda4c12a5fa1b0501787a45478b2878970451e54c4f095c9f0703c",
+      "minimumFreeBytes": 5000000000,
       "recommended": false,
       "pro": true,
       "basedOn": "Gemma 4 E4B, uncensored by HauhauCS",
       "license": "Gemma Terms of Use",
       "licenseURL": "https://ai.google.dev/gemma/terms",
-      "comingSoon": true,
-      "parts": []
+      "release": "anvil-raw-v1",
+      "parts": [
+        {
+          "name": "anvil-raw.litertlm.part000",
+          "sizeBytes": 536870912,
+          "sha256": "fe2c4d3e30e9ef0b893bd4967e610b893b12b986b2e7f5ef39568c2333472170"
+        },
+        {
+          "name": "anvil-raw.litertlm.part001",
+          "sizeBytes": 536870912,
+          "sha256": "957d81337eb3c729db10769c562beabd89060094b6fabdd0fd6f8fa88bf7a591"
+        },
+        {
+          "name": "anvil-raw.litertlm.part002",
+          "sizeBytes": 536870912,
+          "sha256": "d387453558dbcb66158cbabd598c25a2985c0f8e361e2c3c24c41936188df853"
+        },
+        {
+          "name": "anvil-raw.litertlm.part003",
+          "sizeBytes": 536870912,
+          "sha256": "19fdb11d2a7f6146f483eff678d23cbfbcbe567ff1d11ade1e5735ed00a3cee1"
+        },
+        {
+          "name": "anvil-raw.litertlm.part004",
+          "sizeBytes": 536870912,
+          "sha256": "7b93d1d54f6ff4d5f17534ddef0cd00b511552cd3f107c98ae7da03f4fead5e0"
+        },
+        {
+          "name": "anvil-raw.litertlm.part005",
+          "sizeBytes": 536870912,
+          "sha256": "1725f0baf563f37a4f3d81a0322ff208bd7f94dcc508420b8e93bbf0458ce4d1"
+        },
+        {
+          "name": "anvil-raw.litertlm.part006",
+          "sizeBytes": 536870912,
+          "sha256": "2d6644248ea53245f59622cbdd5aaab1610774c584e59c55cf5f4941475569f8"
+        },
+        {
+          "name": "anvil-raw.litertlm.part007",
+          "sizeBytes": 407997664,
+          "sha256": "a128ec5191539ae8e589bf9b4ffc6d3fcc851b863f9202b9637ca3c1f0a69343"
+        }
+      ]
     },
     {
       "id": "anvil-dream",
