@@ -108,30 +108,50 @@
     {
       "id": "anvil-dream",
       "name": "Anvil Dream",
-      "version": "1",
+      "version": "2",
       "kind": "image",
       "summary": "Makes pictures from words",
-      "parameters": "0.9B",
+      "parameters": "3.5B",
       "fileName": "anvil-dream.aar",
-      "sizeBytes": 871229856,
-      "sha256": "48a999192f06fdcb0a683e9e804d4572e86c1ad6d3fe586a6b2b70fdc5032e92",
-      "minimumFreeBytes": 3000000000,
+      "sizeBytes": 3015790846,
+      "sha256": "fb7c456d4b5e4e4fd0e4715a99d0d6fcb9ce5b5ccf1e801d74ba3462e3c28784",
+      "minimumFreeBytes": 8000000000,
       "recommended": false,
       "pro": true,
-      "basedOn": "LCM Dreamshaper v7, converted to Core ML",
-      "license": "MIT",
-      "licenseURL": "https://huggingface.co/SimianLuo/LCM_Dreamshaper_v7",
-      "release": "anvil-dream-v1",
+      "basedOn": "Realism by Stable Yogi V5 XL Lightning, converted to Core ML",
+      "license": "CreativeML Open RAIL++-M",
+      "licenseURL": "https://github.com/Stability-AI/generative-models/blob/main/model_licenses/LICENSE-SDXL1.0",
+      "release": "anvil-dream-v2",
       "parts": [
         {
           "name": "anvil-dream.aar.part000",
           "sizeBytes": 536870912,
-          "sha256": "7fc447258061c9bdae98db8a5562ff48b13373ecfa059bd759f30f883a39c4a4"
+          "sha256": "b97c7b16cd5fc3611b5555229f03e5d2b73bf4557612d3c260bd3b9151db2326"
         },
         {
           "name": "anvil-dream.aar.part001",
-          "sizeBytes": 334358944,
-          "sha256": "8cdda951d53f59d84b5566396dd2b171ca1f6431e53c751817646144f5d9462f"
+          "sizeBytes": 536870912,
+          "sha256": "1d36e070981ea666e3a9e1df8476d7ed314db84d68e094681e806ceec6443c5b"
+        },
+        {
+          "name": "anvil-dream.aar.part002",
+          "sizeBytes": 536870912,
+          "sha256": "1c5a5029e35433f4cc0039365f403b80f5e9fba1dae111ae5a3e8894f666fa99"
+        },
+        {
+          "name": "anvil-dream.aar.part003",
+          "sizeBytes": 536870912,
+          "sha256": "2667bfd1f12dd1e04059501ed407afdc9351731d6a71824e0e0fd9e035420f50"
+        },
+        {
+          "name": "anvil-dream.aar.part004",
+          "sizeBytes": 536870912,
+          "sha256": "c300199e37073ece718e1f08d07faf6ce4da165f5504f13beda284cb063eac19"
+        },
+        {
+          "name": "anvil-dream.aar.part005",
+          "sizeBytes": 331436286,
+          "sha256": "b8d73a159a673c26538719fafa6dae7d484421069f452cd3fe0dafb9841d50ba"
         }
       ]
     }
