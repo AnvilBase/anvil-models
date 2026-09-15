@@ -24,12 +24,13 @@ Anvil Dream is a
 different kind of model: `"kind": "image"`. It makes pictures rather than
 text. The app runs it beside whichever chat model is loaded, through a
 `generate_image` tool the chat model calls when someone asks for a picture. It
-is [LCM Dreamshaper v7](https://huggingface.co/SimianLuo/LCM_Dreamshaper_v7),
-a Latent Consistency Model distilled from Stable Diffusion 1.5, converted to
-Core ML for the Neural Engine and shipped as an Apple Archive (`.aar`) of the
-compiled models, which the app unpacks on the phone. It isn't downloaded from
-anywhere: `scripts/build_anvil_dream.sh` builds it on a Mac, and `source` in
-`sources.json` points at what it built.
+is [Realism by Stable Yogi V5 XL Lightning](https://civitai.com/models/166609?modelVersionId=1075465),
+a photorealistic SDXL model made for a few steps, in
+[LocalMuseAI's Core ML conversion](https://huggingface.co/LocalMuseAI/coreml-realism-by-stable-yogi-v5-xl-lightning-6bit)
+for the Neural Engine, shipped as an Apple Archive (`.aar`) of the compiled
+models, which the app unpacks on the phone. `scripts/build_anvil_dream.sh`
+fetches that conversion at a pinned revision and packs it on a Mac, and `source`
+in `sources.json` points at what it built.
 
 Nothing large is committed here. A `.litertlm` file is several gigabytes; git
 caps a file at 100 MB and a GitHub release asset at 2 GiB, so each model is
@@ -46,8 +47,8 @@ free, plus one part.
 | `sources.json` | Where each model comes from and what it's called in Anvil. This is the file you edit. |
 | `scripts/publish_model.py` | Downloads (or picks up) a source model, splits it, uploads the parts, and rewrites `models.json`. |
 | `scripts/build_anvil_raw/` | Builds Anvil Raw: dequantises HauhauCS's GGUF back to a checkpoint and exports it to `.litertlm` with Google's tooling and Gemma 4 recipe. |
-| `scripts/build_anvil_dream.sh` | Builds Anvil Dream: fetches LCM Dreamshaper v7, folds its guidance scale into the weights, converts to Core ML with Apple's converter, and packs the result as `build/anvil-dream.aar`. |
-| `scripts/fold_lcm_guidance.py` | The folding step, on its own: what makes an LCM U-Net look like a plain Stable Diffusion U-Net to the converter. |
+| `scripts/build_anvil_dream.sh` | Builds Anvil Dream: fetches the Core ML conversion of Realism by Stable Yogi V5 XL Lightning at a pinned revision and packs it as `build/anvil-dream.aar`. |
+| `scripts/fold_lcm_guidance.py` | Kept from Anvil Dream v1 (LCM Dreamshaper v7): folds an LCM's guidance scale into its U-Net so Apple's converter accepts it. |
 
 ## Publishing a model
 
@@ -109,24 +110,29 @@ in this repository rather than a URL: the file is built, not fetched.
 ## Building Anvil Dream
 
 ```sh
-scripts/build_anvil_dream.sh            # about an hour; needs uv, Xcode's tools, 20 GB free
+scripts/build_anvil_dream.sh            # a 3 GB download; needs Xcode's tools, 7 GB free
 scripts/publish_model.py anvil-dream --push
 ```
 
-The build fetches the diffusers weights, then does the one thing that makes an
-LCM convertible: an LCM U-Net takes an extra input, the embedding of the
-guidance scale that classifier-free guidance was distilled into, and Apple's
-converter has no idea what to do with it. That embedding only ever enters the
-network as a constant added just before one linear layer, so for a fixed
-guidance scale (8.0, the model card's number) it is folded into that layer's
-bias — `scripts/fold_lcm_guidance.py`, which checks its own work against the
-unfolded model to about 1e-6. What comes out is a plain Stable Diffusion 1.5
-U-Net, converted like any other: split-einsum attention for the Neural Engine,
-6-bit palettized weights, a batch of one because there is no guidance pass, and
-the U-Net in two chunks. The app supplies the LCM sampler itself, in Swift.
+Nothing is converted here. An SDXL model needs far more memory to convert than
+the result takes to run, so Anvil Dream is LocalMuseAI's Core ML conversion of
+the exact Civitai checkpoint: split-einsum attention for the Neural Engine, a
+6-bit palettized U-Net in two chunks, an 8-bit second text encoder, 1024×1024,
+and a U-Net batch of two for classifier-free guidance, laid out the way Apple's
+Swift pipeline names things. The build fetches it at a pinned revision, leaves
+out the VAE encoder the app doesn't use, and packs the rest.
 
-The result is about a gigabyte and makes a 512×512 picture in four passes of
-the network.
+The package's `PROVENANCE.json` travels in the archive, and the app reads it:
+it names the sampler, steps and guidance the model's creator recommends —
+Euler ancestral, seven steps, guidance 1.5 — and the app samples with exactly
+those. The result is about 3 GB and makes a 1024×1024 picture in seven passes
+of the network. The app needs the build that can run SDXL; one from before it
+would try to run this archive as Stable Diffusion 1.5.
+
+Version 1 was LCM Dreamshaper v7, built from the diffusers weights by folding
+its guidance scale into the U-Net (`scripts/fold_lcm_guidance.py`) and
+converting with Apple's converter; the script that did it is in this
+repository's history.
 
 ## Putting a model together by hand
 
@@ -158,10 +164,13 @@ Those terms travel with every copy and include Google's Prohibited Use Policy,
 which binds whoever runs the model whatever the weights will say; the app
 offers the model under those terms and the catalog entry records them.
 
-Anvil Dream is LCM Dreamshaper v7, which its author publishes under the
-[MIT License](https://huggingface.co/SimianLuo/LCM_Dreamshaper_v7). It was
-distilled from Dreamshaper v7, a fine-tune of Stable Diffusion 1.5; the
-upstream model card is the place to check for anything those carry with them.
+Anvil Dream is Realism by Stable Yogi V5 XL Lightning, a fine-tune of SDXL,
+redistributed under the
+[CreativeML Open RAIL++-M License](https://github.com/Stability-AI/generative-models/blob/main/model_licenses/LICENSE-SDXL1.0)
+it inherits from SDXL. That licence permits redistribution and commercial use,
+requires that a copy of it travel with the model — the archive carries the
+package's `LICENSE` — and binds whoever uses the model to its use restrictions,
+whatever the weights will draw.
 
 Check the upstream licence before swapping in a different model. Not every
 open model is Apache-2.0, and some carry terms that do dictate naming and
